@@ -80,9 +80,14 @@ namespace Stardrop.ViewModels
 
             // Create data view
             var dataGridSortDescription = DataGridSortDescription.FromPath(nameof(Mod.Name), ListSortDirection.Ascending);
+            var dataGridGroupDescriptionPath = new DataGridPathGroupDescription(nameof(Mod.Path));
+            var dataGridGroupDescriptionAuthor = new DataGridPathGroupDescription(nameof(Mod.Author));
+            
 
-            DataView = new DataGridCollectionView(Mods);
+            DataView = new DataGridCollectionView(Mods, false, false);
             DataView.SortDescriptions.Add(dataGridSortDescription);
+            DataView.GroupDescriptions.Add(dataGridGroupDescriptionAuthor);
+            DataView.GroupDescriptions.Add(dataGridGroupDescriptionPath);
             UpdateFilter();
 
             // Do OS specific setup

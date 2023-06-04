@@ -23,6 +23,7 @@ namespace Stardrop.Models
         public string ParsedVersion => Version.ToString();
         public string SuggestedVersion { get; set; }
         public string Name { get; set; }
+        public string Path { get; set; }
         public string Description { get; set; }
         public string GetDescriptionToolTip =>
             // TEMPORARY FIX: Due to bug with Avalonia on Linux platforms, tooltips currently cause crashes when they disappear
@@ -104,10 +105,19 @@ namespace Stardrop.Models
         {
             Manifest = manifest;
             ModFileInfo = modFileInfo;
-
+            
             UniqueId = uniqueId;
             Version = SemVersion.TryParse(version, out var parsedVersion) ? parsedVersion : new SemVersion(0, 0, 0, "bad-version");
             Name = String.IsNullOrEmpty(name) ? uniqueId : name;
+            
+            var dirName = modFileInfo.DirectoryName;
+            var commonName = "Stardew Valley/Mods/";
+            var modNamePath= dirName.Substring(dirName.IndexOf(commonName, StringComparison.Ordinal) + commonName.Length);
+            var foundIndex = modNamePath.IndexOf("/", StringComparison.Ordinal);
+            var nameLength = foundIndex == -1 ? modNamePath.Length : foundIndex;
+            var finalPath = modNamePath.Substring(0, nameLength);
+            Path = String.IsNullOrEmpty(finalPath) ? Program.translation.Get("internal.unknown") : finalPath;
+            
             Description = String.IsNullOrEmpty(description) ? String.Empty : description;
             Author = String.IsNullOrEmpty(author) ? Program.translation.Get("internal.unknown") : author;
 
