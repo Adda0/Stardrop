@@ -727,7 +727,7 @@ namespace Stardrop.Views
                 }
             }
 
-            UpdateProfile(GetCurrentProfile());
+            //UpdateProfile(GetCurrentProfile());
         }
 
         private async void EditProfilesButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -835,6 +835,16 @@ namespace Stardrop.Views
         {
             await HandleModUpdateCheck();
         }
+        
+        private async void UpdateProfile_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            UpdateProfile(GetCurrentProfile());
+        }
+
+        private async void UpdateProfile_Click(object? sender, EventArgs e)
+        {
+            UpdateProfile(GetCurrentProfile());
+        }
 
         private async void StardropUpdate_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
@@ -864,6 +874,16 @@ namespace Stardrop.Views
         private async void ModListRefresh_Click(object? sender, EventArgs e)
         {
             await HandleModListRefresh();
+        }
+        
+        private async void AddModsFromFolder_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            await HandleAddModsFromFolder();
+        }
+
+        private async void AddModsFromFolder_Click(object? sender, EventArgs e)
+        {
+            await HandleAddModsFromFolder();
         }
 
         private async void NexusModBulkInstall_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -937,6 +957,8 @@ namespace Stardrop.Views
         // End of events
         private async Task StartSMAPI()
         {
+            UpdateProfile(GetCurrentProfile());
+            
             Program.helper.Log($"Starting SMAPI at path: {Program.settings.SMAPIFolderPath}", Helper.Status.Debug);
             if (await ValidateSMAPIPath() is false)
             {
@@ -951,7 +973,7 @@ namespace Stardrop.Views
             var profile = this.FindControl<ComboBox>("profileComboBox").SelectedItem as Profile;
             if (profile is null)
             {
-                CreateWarningWindow(Program.translation.Get("ui.warning.unable_to_determine_profile"), Program.translation.Get("internal.ok"));
+                await CreateWarningWindow(Program.translation.Get("ui.warning.unable_to_determine_profile"), Program.translation.Get("internal.ok"));
                 Program.helper.Log($"Unable to determine selected profile, SMAPI will not be started!", Helper.Status.Alert);
                 return;
             }
@@ -971,18 +993,18 @@ namespace Stardrop.Views
                 File.WriteAllText(Pathing.GetSettingsPath(), JsonSerializer.Serialize(Program.settings, new JsonSerializerOptions() { WriteIndented = true }));
             }
 
-            using (Process smapi = Process.Start(SMAPI.GetPrepareProcess(false)))
-            {
-                SMAPI.IsRunning = true;
-                _viewModel.IsLocked = true;
+            //using (Process smapi = Process.Start(SMAPI.GetPrepareProcess(false)))
+            //{
+            //    SMAPI.IsRunning = true;
+            //    // _viewModel.IsLocked = true;
 
-                _smapiProcessTimer = new DispatcherTimer();
-                _smapiProcessTimer.Interval = new TimeSpan(TimeSpan.TicksPerMillisecond * 500);
-                _smapiProcessTimer.Tick += _smapiProcessTimer_Tick;
-                _smapiProcessTimer.Start();
+            //    _smapiProcessTimer = new DispatcherTimer();
+            //    _smapiProcessTimer.Interval = new TimeSpan(TimeSpan.TicksPerMillisecond * 500);
+            //    _smapiProcessTimer.Tick += _smapiProcessTimer_Tick;
+            //    _smapiProcessTimer.Start();
 
-                this.WindowState = WindowState.Minimized;
-            }
+            //    // this.WindowState = WindowState.Minimized;
+            //}
         }
 
         private async Task HandleModAdd()
@@ -1410,6 +1432,13 @@ namespace Stardrop.Views
 
             // Hide the required mods
             _viewModel.HideRequiredMods();
+        }
+        
+        private async Task HandleAddModsFromFolder()
+        {
+            var mod_folder_path = Program.settings.FolderForModsToAddPath;
+            var files = Directory.GetFiles(mod_folder_path, "*", SearchOption.TopDirectoryOnly);
+            await AddMods(files);
         }
 
         internal async Task<bool> ProcessNXMLink(string? apiKey, NXM nxmLink)
@@ -1898,7 +1927,7 @@ namespace Stardrop.Views
                             bool isUpdate = false;
                             if (manifest is not null)
                             {
-                                string installPath = Program.settings.ModInstallPath;
+                                var installPath = Program.settings.ModInstallPath;
                                 if (_viewModel.Mods.FirstOrDefault(m => m.UniqueId.Equals(manifest.UniqueID, StringComparison.OrdinalIgnoreCase)) is Mod mod && mod is not null && mod.ModFileInfo.Directory is not null)
                                 {
                                     if (manifest.DeleteOldVersion is false && alwaysAskToDelete is true)
@@ -1950,6 +1979,7 @@ namespace Stardrop.Views
                                 SetLockState(true, String.Format(isUpdate ? Program.translation.Get("ui.warning.mod_updating") : Program.translation.Get("ui.warning.mod_installing"), manifest.Name));
 
                                 Program.helper.Log($"Install path for mod {manifest.UniqueID}:{installPath}");
+                                string outputPath;
                                 var manifestFolderPath = manifestPath.Replace("manifest.json", String.Empty, StringComparison.OrdinalIgnoreCase);
                                 foreach (var entry in archive.Entries.Where(e => e.Key.StartsWith(manifestFolderPath)))
                                 {
@@ -1957,7 +1987,7 @@ namespace Stardrop.Views
                                     {
                                         continue;
                                     }
-                                    var outputPath = Path.Combine(installPath, manifestFolderPath, String.IsNullOrEmpty(manifestFolderPath) ? entry.Key : Path.GetRelativePath(manifestFolderPath, entry.Key));
+                                    outputPath = Path.Combine(installPath, manifestFolderPath, String.IsNullOrEmpty(manifestFolderPath) ? entry.Key : Path.GetRelativePath(manifestFolderPath, entry.Key));
 
                                     if (String.IsNullOrEmpty(manifestFolderPath) is false)
                                     {
@@ -1989,9 +2019,8 @@ namespace Stardrop.Views
                                         await Task.Run(() => entry.WriteToFile(outputPath, new ExtractionOptions() { ExtractFullPath = false, Overwrite = true }));
                                     }
                                 }
-
                                 SetLockState(false);
-                                addedMods.Add(new Mod(manifest, null, manifest.UniqueID, manifest.Version, manifest.Name, manifest.Description, manifest.Author));
+                                addedMods.Add(new Mod(manifest, new FileInfo(manifestFolderPath), manifest.UniqueID, manifest.Version, manifest.Name, manifest.Description, manifest.Author));
                             }
                             else
                             {
