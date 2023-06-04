@@ -20,24 +20,18 @@ namespace Stardrop.Models
 
         public string UniqueId { get; set; }
         public SemVersion Version { get; set; }
-        public string ParsedVersion { get { return Version.ToString(); } }
+        public string ParsedVersion => Version.ToString();
         public string SuggestedVersion { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string GetDescriptionToolTip
-        {
-            get
-            {
-                // TEMPORARY FIX: Due to bug with Avalonia on Linux platforms, tooltips currently cause crashes when they disappear
-                // To work around this, tooltips are purposely not displayed
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                {
-                    return null;
-                }
-
-                return Description;
-            }
-        }
+        public string GetDescriptionToolTip =>
+            // TEMPORARY FIX: Due to bug with Avalonia on Linux platforms, tooltips currently cause crashes when they disappear
+            // To work around this, tooltips are purposely not displayed
+            // if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            // {
+            // return null;
+            // }
+            Description;
         public string Author { get; set; }
         public Config? _config { get; set; }
         public Config? Config { get { return _config; } set { _config = value; NotifyPropertyChanged("Config"); NotifyPropertyChanged("HasConfig"); } }
