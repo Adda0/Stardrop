@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace Stardrop.ViewModels
 {
@@ -160,7 +161,8 @@ namespace Stardrop.ViewModels
             {
                 try
                 {
-                    var localManifest = directory.EnumerateFiles("manifest.json");
+                    var regex = new Regex("manifest.json", RegexOptions.IgnoreCase);
+                    var localManifest = directory.EnumerateFiles().Where(file => regex.IsMatch(file.Name));
                     if (localManifest.Count() == 0)
                     {
                         manifests.AddRange(GetManifestFiles(directory));
