@@ -582,7 +582,11 @@ namespace Stardrop.ViewModels
             }
             if (!String.IsNullOrEmpty(_filterText) && !String.IsNullOrEmpty(_columnFilter))
             {
-                if (_columnFilter == Program.translation.Get("ui.main_window.combobox.mod_name") && !mod.Name.Contains(_filterText, StringComparison.OrdinalIgnoreCase))
+                if (_columnFilter == Program.translation.Get("ui.main_window.combobox.mod_name")
+                    // Try filtering on mod path name (group name).
+                    && !mod.Path.Contains(_filterText, StringComparison.OrdinalIgnoreCase)
+                    // Try filtering on Mod name.
+                    && !mod.Name.Contains(_filterText, StringComparison.OrdinalIgnoreCase))
                 {
                     return false;
                 }
