@@ -392,65 +392,75 @@ namespace Stardrop.Views
         private void ModGridMenuRow_ChangeState(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             var modGrid = this.FindControl<DataGrid>("modGrid");
-            if (modGrid is null)
-            {
-                return;
-            }
+            if (modGrid is null) { return; }
 
             var selectedMod = (sender as MenuItem).DataContext as Mod;
-            if (selectedMod is not null)
+            if (selectedMod is null) { return; }
+            // Add the selected mod into the selection list if shift or ctrl is held, otherwise clear the current selection
+            if (!modGrid.SelectedItems.Contains(selectedMod))
             {
-                // Add the selected mod into the selection list if shift or ctrl is held, otherwise clear the current selection
-                if (!modGrid.SelectedItems.Contains(selectedMod))
-                {
-                    if (!(_ctrlPressed || _shiftPressed))
-                    {
-                        modGrid.SelectedItems.Clear();
-                    }
-                    modGrid.SelectedItems.Add(selectedMod);
-                }
-
-                // Enable / disable all selected mods based on the clicked mod
-                selectedMod.IsEnabled = !selectedMod.IsEnabled;
-                foreach (Mod mod in modGrid.SelectedItems)
-                {
-                    mod.IsEnabled = selectedMod.IsEnabled;
-
-                    if (selectedMod.IsEnabled)
-                    {
-                        // Enable any existing requirements
-                        EnableRequirements(mod);
-                    }
-                    else
-                    {
-                        // Disable any mods that require it requirements
-                        DisableRequirements(mod);
-                    }
-                }
+                if (!(_ctrlPressed || _shiftPressed)) { modGrid.SelectedItems.Clear(); }
+                modGrid.SelectedItems.Add(selectedMod);
             }
 
-            UpdateProfile(GetCurrentProfile());
+            EnableDisableSelectedMods(modGrid, selectedMod);
+        }
+
+        /// <summary>
+        /// Enable/Disable all components for the mod(s) of the selected mod component(s).
+        /// </summary>
+        ///
+        /// <param name="sender">The currently selected component of the whole mod whose components to enable/disable</param>
+        private void ModGridMenuRow_ChangeWholeModState(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            var modGrid = this.FindControl<DataGrid>("modGrid");
+            if (modGrid is null) { return; }
+
+            var selectedMod = (sender as MenuItem)?.DataContext as Mod;
+            if (selectedMod is null) { return; }
+            // Select all components of the whole mod(s) whose component selectedMod is currently selected or whose components have been already selected previously.
+            var originallySelectedModPaths = new List<string>();
+            foreach (Mod mod in modGrid.SelectedItems) { originallySelectedModPaths.Add(mod.Path); }
+            if (originallySelectedModPaths.Count is 0) { originallySelectedModPaths.Add(selectedMod.Path); }
+            foreach (Mod mod in modGrid.Items)
+            {
+                if (originallySelectedModPaths.Contains(mod.Path)) { modGrid.SelectedItems.Add(mod); }
+            }
+
+            EnableDisableSelectedMods(modGrid, selectedMod);
+        }
+
+        /// <summary>
+        /// Enable/Disable selected mods.
+        /// </summary>
+        ///
+        /// <param name="selectedMod">The currently selected which the enabling/disabling is performed on</param>
+        private void EnableDisableSelectedMods(DataGrid? modGrid, Mod? selectedMod)
+        {
+            if (selectedMod is null || modGrid is null) { return; }
+            // Enable / disable all selected mods based on the currently selected mod.
+            selectedMod.IsEnabled = !selectedMod.IsEnabled;
+            foreach (Mod mod in modGrid.SelectedItems)
+            {
+                mod.IsEnabled = selectedMod.IsEnabled;
+                if (selectedMod.IsEnabled) { EnableRequirements(mod); /* Enable any existing requirements */ }
+                else { DisableRequirements(mod); /* Disable any mods that require it requirements. */ }
+            }
+            // NOTE: Only update profiles when explicitly requested by the user.
+            // UpdateProfile(GetCurrentProfile());
         }
 
         private void ModGridMenuRow_OpenFolderPath(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             var selectedMod = (sender as MenuItem).DataContext as Mod;
-            if (selectedMod is null)
-            {
-                return;
-            }
-
+            if (selectedMod is null) { return; }
             OpenNativeExplorer(selectedMod.ModFileInfo.DirectoryName);
         }
 
         private void ModGridMenuRow_OpenModPage(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             var selectedMod = (sender as MenuItem).DataContext as Mod;
-            if (selectedMod is null)
-            {
-                return;
-            }
-
+            if (selectedMod is null) { return; }
             _viewModel.OpenBrowser(selectedMod.ModPageUri);
         }
 
@@ -855,7 +865,7 @@ namespace Stardrop.Views
         {
             await HandleModUpdateCheck();
         }
-        
+
         private async void UpdateProfile_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             UpdateProfile(GetCurrentProfile());
@@ -895,7 +905,7 @@ namespace Stardrop.Views
         {
             await HandleModListRefresh();
         }
-        
+
         private async void AddModsFromFolder_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             await HandleAddModsFromFolder();
@@ -978,7 +988,7 @@ namespace Stardrop.Views
         private async Task StartSMAPI()
         {
             UpdateProfile(GetCurrentProfile());
-            
+
             Program.helper.Log($"Starting SMAPI at path: {Program.settings.SMAPIFolderPath}", Helper.Status.Debug);
             if (await ValidateSMAPIPath() is false)
             {
@@ -1453,7 +1463,7 @@ namespace Stardrop.Views
             // Hide the required mods
             _viewModel.HideRequiredMods();
         }
-        
+
         private async Task HandleAddModsFromFolder()
         {
             var mod_folder_path = Program.settings.FolderForModsToAddPath;
