@@ -63,7 +63,7 @@ namespace Stardrop.Views
             }
 
             var themeComboBox = this.FindControl<ComboBox>("themeComboBox");
-            themeComboBox.Items = _themes.Keys;
+            themeComboBox.ItemsSource = _themes.Keys;
             themeComboBox.SelectedItem = !_themes.ContainsKey(Program.settings.Theme) ? _themes.Keys.First() : Program.settings.Theme;
             themeComboBox.SelectionChanged += (sender, e) =>
             {
@@ -83,7 +83,7 @@ namespace Stardrop.Views
             }
 
             var preferredComboBox = this.FindControl<ComboBox>("preferredServerBox");
-            preferredComboBox.Items = descriptionToServerEnum.Keys;
+            preferredComboBox.ItemsSource = descriptionToServerEnum.Keys;
             preferredComboBox.SelectedItem = EnumParser.GetDescription(Program.settings.PreferredNexusServer);
             preferredComboBox.SelectionChanged += (sender, e) =>
             {
@@ -92,7 +92,7 @@ namespace Stardrop.Views
 
             // Handle adding the languages
             var languageComboBox = this.FindControl<ComboBox>("languageComboBox");
-            languageComboBox.Items = Program.translation.GetAvailableTranslations();
+            languageComboBox.ItemsSource = Program.translation.GetAvailableTranslations();
             languageComboBox.SelectedItem = String.IsNullOrEmpty(Program.settings.Language) ? Program.translation.GetAvailableTranslations().First() : Program.translation.GetLanguage(Program.settings.Language);
             languageComboBox.SelectionChanged += (sender, e) =>
             {
@@ -106,9 +106,9 @@ namespace Stardrop.Views
             // Cache the old settings
             _oldSettings = Program.settings.ShallowCopy();
 
-#if DEBUG
-            this.AttachDevTools();
-#endif
+// #if DEBUG
+//             this.AttachDevTools();
+// #endif
         }
 
         private async void RegisterNXMButton_Click(object? sender, RoutedEventArgs e)

@@ -1,4 +1,3 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Stardrop.Models;
@@ -16,9 +15,9 @@ namespace Stardrop.Views
         {
             InitializeComponent();
 
-#if DEBUG
-            this.AttachDevTools();
-#endif
+// #if DEBUG
+//             this.AttachDevTools();
+// #endif
         }
 
         public ProfileEditor(ProfileEditorViewModel viewModel) : this()
@@ -27,7 +26,7 @@ namespace Stardrop.Views
 
             // Load the profiles
             var profileListBox = this.FindControl<ListBox>("profileList");
-            profileListBox.Items = _viewModel.Profiles;
+            profileListBox.ItemsSource = _viewModel.Profiles;
             profileListBox.SelectedIndex = 0;
             profileListBox.SelectionChanged += ProfileListBox_SelectionChanged;
 

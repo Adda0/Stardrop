@@ -229,12 +229,16 @@ namespace Stardrop
         // Avalonia configuration, don't remove; also used by visual designer.
         public static AppBuilder BuildAvaloniaApp()
         {
+            IconProvider.Current
+            // .Register<FontAwesomeIconProvider>()
+            .Register<MaterialDesignIconProvider>();
+
             return AppBuilder.Configure<App>()
                 .UseReactiveUI()
                 .UsePlatformDetect()
-                .LogToTrace()
-                .WithIcons(container => container
-                .Register<MaterialDesignIconProvider>());
+                .LogToTrace();
+                // .WithIcons(container => container
+                // .Register<MaterialDesignIconProvider>());
         }
     }
 }

@@ -13,7 +13,6 @@
         Width="430"
         Height="650"
         Background="{DynamicResource ThemeBackgroundBrush}"
-        HasSystemDecorations="true"
         ExtendClientAreaToDecorationsHint="true"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"
@@ -115,10 +114,8 @@
 									<ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
 												  VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
 										<ItemsPresenter Name="PART_ItemsPresenter"
-														Items="{TemplateBinding Items}"
 														ItemsPanel="{TemplateBinding ItemsPanel}"
-														ItemTemplate="{TemplateBinding ItemTemplate}"
-														VirtualizationMode="{TemplateBinding VirtualizationMode}" />
+										/>
 									</ScrollViewer>
 								</Border>
 							</Popup>

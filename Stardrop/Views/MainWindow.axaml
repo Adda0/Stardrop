@@ -15,13 +15,10 @@
         Width="1430"
         Height="800"
         Background="{DynamicResource ThemeBackgroundBrush}"
-        HasSystemDecorations="{Binding HasSystemDecorations}"
         ExtendClientAreaToDecorationsHint="true"
         ExtendClientAreaChromeHints="{Binding ChromeHint}"
         ExtendClientAreaTitleBarHeightHint="-1"
         CanResize="True"
-        Opened="MainWindow_Opened"
-        Closing="MainWindow_Closing"
         WindowStartupLocation="CenterScreen"
         Icon="/Assets/icon.ico">
 
@@ -78,9 +75,7 @@
 										CornerRadius="{DynamicResource OverlayCornerRadius}">
 									<ScrollViewer Classes="menuscroller">
 										<ItemsPresenter Name="PART_ItemsPresenter"
-														Items="{TemplateBinding Items}"
 														ItemsPanel="{TemplateBinding ItemsPanel}"
-														ItemTemplate="{TemplateBinding ItemTemplate}"
 														Margin="{DynamicResource MenuFlyoutScrollerMargin}"
 														Grid.IsSharedSizeScope="True" />
 									</ScrollViewer>
@@ -202,10 +197,8 @@
 									<ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
 												  VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
 										<ItemsPresenter Name="PART_ItemsPresenter"
-														Items="{TemplateBinding Items}"
 														ItemsPanel="{TemplateBinding ItemsPanel}"
-														ItemTemplate="{TemplateBinding ItemTemplate}"
-														VirtualizationMode="{TemplateBinding VirtualizationMode}" />
+										/>
 									</ScrollViewer>
 								</Border>
 							</Popup>
@@ -428,7 +421,7 @@
 		</DockPanel>
 
 		<Border Name="dragOverBorder" Margin="10" DragDrop.AllowDrop="True" Grid.Row="3" Grid.ColumnSpan="2" BorderBrush="{DynamicResource HighlightBrush}" BorderThickness="2">
-			<DataGrid Name="modGrid" Foreground="{DynamicResource DataGridRowForeground}" Background="{DynamicResource DataGridRowBackground}" AlternatingRowBackground="{DynamicResource AlternativeDataGridRowBackground}" CanUserSortColumns="True" CanUserResizeColumns="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+			<DataGrid Name="modGrid" Foreground="{DynamicResource DataGridRowForeground}" Background="{DynamicResource DataGridRowBackground}" CanUserSortColumns="True" CanUserResizeColumns="True" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 				<DataGrid.Resources>
 					<ContextMenu x:Key="GridColumnContextMenu" DataContext="{Binding $parent[DataGrid].DataContext}">
 						<!-- <MenuItem Header="{Binding SortText}" Click="ModGridMenuColumn_ChangeSort" />-->
@@ -500,7 +493,7 @@
 						</DataGridTemplateColumn.Header>
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
-								<ListBox Items="{Binding HardRequirements}" Background="Transparent">
+								<ListBox ItemsSource="{Binding HardRequirements}" Background="Transparent">
 									<ListBox.ItemTemplate>
 										<DataTemplate>
 											<TextBlock Text="{Binding Path=Name}" Foreground="{DynamicResource DataGridRowForeground}" />
@@ -516,7 +509,7 @@
 						</DataGridTemplateColumn.Header>
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
-								<ListBox Items="{Binding MissingRequirements}" Background="Transparent">
+								<ListBox ItemsSource="{Binding MissingRequirements}" Background="Transparent">
 									<ListBox.ItemTemplate>
 										<DataTemplate>
 											<Button Content="{Binding Path=Name}" Classes="hyperlink" Command="{Binding $parent[DataGrid].DataContext.OpenBrowser}" CommandParameter="{Binding GenericLink}" Foreground="{DynamicResource HighlightForegroundBrush}"/>

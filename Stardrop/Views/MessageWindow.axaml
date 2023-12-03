@@ -12,7 +12,6 @@
         Width="300"
         Height="150"
         Background="{DynamicResource ThemeBackgroundBrush}"
-        HasSystemDecorations="false"
         Icon="/Assets/icon.ico">
 
 	<Window.Styles>

@@ -1,4 +1,3 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Stardrop.Models.Data;
@@ -15,9 +14,9 @@ namespace Stardrop.Views
         public NexusInfo()
         {
             InitializeComponent();
-#if DEBUG
-            this.AttachDevTools();
-#endif
+// #if DEBUG
+//             this.AttachDevTools();
+// #endif
         }
 
 

@@ -33,19 +33,21 @@ namespace Stardrop.Views
     {
         private readonly MainWindowViewModel _viewModel;
         private readonly ProfileEditorViewModel _editorView;
-        private DispatcherTimer _searchBoxTimer;
-        private DispatcherTimer _smapiProcessTimer;
-        private DispatcherTimer _lockSentinel;
-        private DispatcherTimer _nxmSentinel;
+        private DispatcherTimer? _searchBoxTimer;
+        private DispatcherTimer? _smapiProcessTimer;
+        private DispatcherTimer? _lockSentinel;
+        private DispatcherTimer? _nxmSentinel;
 
         // Tracking related
         private bool _shiftPressed;
         private bool _ctrlPressed;
 
-        private string _lockReason;
+        private string? _lockReason;
 
         public MainWindow()
         {
+            Opened += MainWindow_Opened;
+            Closing += MainWindow_Closing;
             InitializeComponent();
 
             // Set the main window view
@@ -57,7 +59,7 @@ namespace Stardrop.Views
             var modGrid = this.FindControl<DataGrid>("modGrid");
             modGrid.IsReadOnly = true;
             modGrid.LoadingRow += (sender, e) => { e.Row.Header = e.Row.GetIndex() + 1; };
-            modGrid.Items = _viewModel.DataView;
+            modGrid.ItemsSource = _viewModel.DataView;
             AddHandler(DragDrop.DropEvent, Drop);
             AddHandler(DragDrop.DragOverEvent, (sender, e) =>
             {
@@ -78,7 +80,7 @@ namespace Stardrop.Views
             // Set profile list
             _editorView = new ProfileEditorViewModel(Pathing.GetProfilesFolderPath());
             var profileComboBox = this.FindControl<ComboBox>("profileComboBox");
-            profileComboBox.Items = _editorView.Profiles;
+            profileComboBox.ItemsSource = _editorView.Profiles;
             profileComboBox.SelectedIndex = 0;
             if (_editorView.Profiles.FirstOrDefault(p => p.Name == Program.settings.LastSelectedProfileName) is Profile oldProfile && oldProfile is not null)
             {
@@ -157,9 +159,9 @@ namespace Stardrop.Views
                 StartSMAPI();
             }
 
-#if DEBUG
-            this.AttachDevTools();
-#endif
+// #if DEBUG
+//             this.AttachDevTools();
+// #endif
         }
 
         private void MainWindow_KeyDown(object? sender, KeyEventArgs e)
@@ -422,7 +424,7 @@ namespace Stardrop.Views
             var originallySelectedModPaths = new List<string>();
             foreach (Mod mod in modGrid.SelectedItems) { originallySelectedModPaths.Add(mod.Path); }
             if (originallySelectedModPaths.Count is 0) { originallySelectedModPaths.Add(selectedMod.Path); }
-            foreach (Mod mod in modGrid.Items)
+            foreach (Mod mod in modGrid.ItemsSource)
             {
                 if (originallySelectedModPaths.Contains(mod.Path)) { modGrid.SelectedItems.Add(mod); }
             }
