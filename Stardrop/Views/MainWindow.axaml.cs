@@ -1979,7 +1979,7 @@ namespace Stardrop.Views
                                             var targetDirectory = new DirectoryInfo(mod.ModFileInfo.DirectoryName);
                                             if (targetDirectory is not null && targetDirectory.Exists)
                                             {
-                                                targetDirectory.Delete(true);
+                                                targetDirectory.Delete(recursive: true);
                                             }
                                         }
                                     }
