@@ -1,4 +1,3 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
@@ -17,9 +16,6 @@ namespace Stardrop.Views
         public ProfileNaming()
         {
             InitializeComponent();
-#if DEBUG
-            this.AttachDevTools();
-#endif
         }
 
         public ProfileNaming(ProfileEditorViewModel parentView, Profile? renameTarget = null) : this()

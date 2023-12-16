@@ -1,4 +1,3 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
@@ -11,9 +10,6 @@ namespace Stardrop.Views
         public NexusLogin()
         {
             InitializeComponent();
-#if DEBUG
-            this.AttachDevTools();
-#endif
         }
 
         public NexusLogin(MainWindowViewModel viewModel) : this()

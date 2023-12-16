@@ -1,4 +1,3 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Stardrop.ViewModels;
@@ -17,10 +16,6 @@ namespace Stardrop.Views
             // Set the main window view
             _viewModel = new MessageWindowViewModel();
             DataContext = _viewModel;
-
-#if DEBUG
-            this.AttachDevTools();
-#endif
         }
 
         public MessageWindow(string messageText, string? positiveButtonText = null, string? negativeButtonText = null) : this()
