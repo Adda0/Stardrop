@@ -525,7 +525,7 @@ namespace Stardrop.Views
                 return;
             }
 
-            OpenNativeExplorer(selectedMod.ModFileInfo.DirectoryName);
+            OpenNativeExplorer(Path.Join(selectedMod.ModFileInfo.DirectoryName, "manifest.json"));
         }
 
         private void ModGridMenuRow_OpenModPage(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -2366,14 +2366,19 @@ namespace Stardrop.Views
                 }
                 else
                 {
-                    var processInfo = new ProcessStartInfo
-                    {
-                        FileName = folderPath,
-                        CreateNoWindow = false,
-                        UseShellExecute = true
-                    };
+                    _viewModel.OpenBrowser(folderPath);
+                    // Program.helper.Log($"Opening folder path: {folderPath}", Helper.Status.Debug);
+                    // var processInfo = new ProcessStartInfo
+                    // {
+                    //     FileName = "xdg-open",
+                    //     Arguments = $"\"{folderPath}/manifest.json\"",
+                    //     CreateNoWindow = false,
+                    //     UseShellExecute = true
+                    // };
+                    // var process = Process.Start(processInfo);
 
-                    var process = Process.Start(processInfo);
+                    // SetLockState(false);
+                    // CreateWarningWindow(folderPath, Program.translation.Get("internal.ok"));
                 }
             }
             catch (Exception ex)
