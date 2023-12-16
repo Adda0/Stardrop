@@ -10,7 +10,7 @@ namespace Stardrop.Views
 {
     public partial class WarningWindow : Window
     {
-        private readonly MainWindowViewModel _mainWindowModel;
+        private readonly MainWindowViewModel? _mainWindowModel;
         private readonly WarningWindowViewModel _viewModel;
         private bool _closeOnExitSMAPI;
         private bool _closeOnParentUnlock;
@@ -52,18 +52,18 @@ namespace Stardrop.Views
             _viewModel.IsButtonVisible = false;
         }
 
-        public override void Show()
+        public async override void Show()
         {
             base.Show();
 
             if (_closeOnExitSMAPI)
             {
-                WaitForProcessToClose();
+                await WaitForProcessToClose();
             }
 
             if (_closeOnParentUnlock)
             {
-                WaitForParentToUnlock();
+                await WaitForParentToUnlock();
             }
         }
 
@@ -79,11 +79,14 @@ namespace Stardrop.Views
 
         private async Task WaitForParentToUnlock()
         {
-            while (_mainWindowModel.IsLocked)
+            if (_mainWindowModel is not null)
             {
-                await Task.Delay(500);
+                while (_mainWindowModel.IsLocked)
+                {
+                    await Task.Delay(500);
+                }
+                this.Close();
             }
-            this.Close();
         }
 
         private void UnlockButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

@@ -44,7 +44,7 @@ namespace Stardrop
                 }
             }
 
-            Current.Styles.Insert(0, !themes.ContainsKey(Program.settings.Theme) ? themes.Values.First() : themes[Program.settings.Theme]);
+            Current?.Styles.Insert(0, !themes.ContainsKey(Program.settings.Theme) ? themes.Values.First() : themes[Program.settings.Theme]);
         }
 
         private async void OnUrlsOpen(object? sender, UrlOpenedEventArgs e, MainWindow mainWindow)

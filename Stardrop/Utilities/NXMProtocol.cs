@@ -16,10 +16,10 @@ namespace Stardrop.Utilities
                     return false;
                 }
 
-                var keyTest = Registry.CurrentUser.OpenSubKey("Software", true).OpenSubKey("Classes", true);
-                RegistryKey key = keyTest.CreateSubKey("nxm");
-                key.SetValue("URL Protocol", "nxm");
-                key.CreateSubKey(@"shell\open\command").SetValue("", "\"" + applicationPath + "\" --nxm \"%1\"");
+                var keyTest = Registry.CurrentUser.OpenSubKey("Software", true)?.OpenSubKey("Classes", true);
+                RegistryKey? key = keyTest?.CreateSubKey("nxm");
+                key?.SetValue("URL Protocol", "nxm");
+                key?.CreateSubKey(@"shell\open\command").SetValue("", "\"" + applicationPath + "\" --nxm \"%1\"");
             }
             catch (Exception ex)
             {
@@ -40,19 +40,19 @@ namespace Stardrop.Utilities
                     return false;
                 }
 
-                var baseKeyTest = Registry.CurrentUser.OpenSubKey("Software", true).OpenSubKey("Classes", true).OpenSubKey("nxm", true);
-                if (baseKeyTest.GetValue("URL Protocol").ToString() != "nxm")
+                var baseKeyTest = Registry.CurrentUser.OpenSubKey("Software", true)?.OpenSubKey("Classes", true)?.OpenSubKey("nxm", true);
+                if (baseKeyTest?.GetValue("URL Protocol")?.ToString() != "nxm")
                 {
                     return false;
                 }
 
-                var actualKeyTest = Registry.CurrentUser.OpenSubKey("Software", true).OpenSubKey("Classes", true).OpenSubKey(@"nxm\shell\open\command", true);
-                if (actualKeyTest.GetValue(String.Empty).ToString() != "\"" + applicationPath + "\" --nxm \"%1\"")
+                var actualKeyTest = Registry.CurrentUser.OpenSubKey("Software", true)?.OpenSubKey("Classes", true)?.OpenSubKey(@"nxm\shell\open\command", true);
+                if (actualKeyTest?.GetValue(String.Empty)?.ToString() != "\"" + applicationPath + "\" --nxm \"%1\"")
                 {
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
