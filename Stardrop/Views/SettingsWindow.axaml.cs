@@ -105,10 +105,6 @@ namespace Stardrop.Views
 
             // Cache the old settings
             _oldSettings = Program.settings.ShallowCopy();
-
-#if DEBUG
-            this.AttachDevTools();
-#endif
         }
 
         private async void RegisterNXMButton_Click(object? sender, RoutedEventArgs e)

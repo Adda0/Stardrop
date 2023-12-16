@@ -1,4 +1,3 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Stardrop.Utilities.External;
@@ -25,10 +24,6 @@ namespace Stardrop.Views
 
             this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             this.SizeToContent = SizeToContent.Height;
-
-#if DEBUG
-            this.AttachDevTools();
-#endif
         }
 
         public WarningWindow(string warningText, string buttonText) : this()

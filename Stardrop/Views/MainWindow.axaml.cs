@@ -156,10 +156,6 @@ namespace Stardrop.Views
             {
                 StartSMAPI();
             }
-
-#if DEBUG
-            this.AttachDevTools();
-#endif
         }
 
         private void MainWindow_KeyDown(object? sender, KeyEventArgs e)

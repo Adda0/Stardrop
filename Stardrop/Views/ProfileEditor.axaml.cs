@@ -1,4 +1,3 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Stardrop.Models;
@@ -15,10 +14,6 @@ namespace Stardrop.Views
         public ProfileEditor()
         {
             InitializeComponent();
-
-#if DEBUG
-            this.AttachDevTools();
-#endif
         }
 
         public ProfileEditor(ProfileEditorViewModel viewModel) : this()
