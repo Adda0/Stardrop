@@ -1220,7 +1220,7 @@ namespace Stardrop.Views
             }
 
             KeyValuePair<string, string>? latestSmapiToUri = await GitHub.GetLatestSMAPIRelease();
-            if (latestSmapiToUri is not null && SemVersion.TryParse(latestSmapiToUri?.Key, SemVersionStyles.Any, out var latestVersion) && currentSmapiVersion is not null && latestVersion.CompareSortOrderTo(currentSmapiVersion) > 0) 
+            if (latestSmapiToUri is not null && SemVersion.TryParse(latestSmapiToUri?.Key, SemVersionStyles.Any, out var latestVersion) && currentSmapiVersion is not null && latestVersion.CompareSortOrderTo(currentSmapiVersion) > 0)
             {
                 var confirmationWindow = new MessageWindow(String.Format(Program.translation.Get("ui.message.SMAPI_update_available"), latestVersion));
                 if (await confirmationWindow.ShowDialog<bool>(this) is false)
@@ -2053,7 +2053,7 @@ namespace Stardrop.Views
                                     }
                                 }
                                 SetLockState(false);
-                                addedMods.Add(new Mod(manifest, new FileInfo(manifestFolderPath), manifest.UniqueID, manifest.Version, manifest.Name, manifest.Description, manifest.Author));
+                                addedMods.Add(new Mod(manifest, new FileInfo(Path.Join(installPath, manifestFolderPath)), manifest.UniqueID, manifest.Version, manifest.Name, manifest.Description, manifest.Author));
                             }
                             else
                             {
