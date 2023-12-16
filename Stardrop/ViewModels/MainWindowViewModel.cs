@@ -584,17 +584,17 @@ namespace Stardrop.ViewModels
             {
                 if (_columnFilter == Program.translation.Get("ui.main_window.combobox.mod_name")
                     // Try filtering on mod path name (group name).
-                    && !mod.Path.Contains(_filterText, StringComparison.OrdinalIgnoreCase)
+                    && !mod.Path.Replace(" ", String.Empty).Contains(_filterText.Replace(" ", String.Empty), StringComparison.OrdinalIgnoreCase)
                     // Try filtering on Mod name.
-                    && !mod.Name.Contains(_filterText, StringComparison.OrdinalIgnoreCase))
+                    && !mod.Name.Replace(" ", String.Empty).Contains(_filterText.Replace(" ", String.Empty), StringComparison.OrdinalIgnoreCase))
                 {
                     return false;
                 }
-                else if (_columnFilter == Program.translation.Get("ui.main_window.combobox.author") && !mod.Author.Contains(_filterText, StringComparison.OrdinalIgnoreCase))
+                else if (_columnFilter == Program.translation.Get("ui.main_window.combobox.author") && !mod.Author.Replace(" ", String.Empty).Contains(_filterText.Replace(" ", String.Empty), StringComparison.OrdinalIgnoreCase))
                 {
                     return false;
                 }
-                else if (_columnFilter == Program.translation.Get("ui.main_window.combobox.requirements") && !mod.HardRequirements.Any(r => r.Name is null || r.Name.Contains(_filterText, StringComparison.OrdinalIgnoreCase)) && !mod.MissingRequirements.Any(r => r.Name is null || r.Name.Contains(_filterText, StringComparison.OrdinalIgnoreCase)))
+                else if (_columnFilter == Program.translation.Get("ui.main_window.combobox.requirements") && !mod.HardRequirements.Any(r => r.Name is null || r.Name.Replace(" ", String.Empty).Contains(_filterText.Replace(" ", String.Empty), StringComparison.OrdinalIgnoreCase)) && !mod.MissingRequirements.Any(r => r.Name is null || r.Name.Replace(" ", String.Empty).Contains(_filterText.Replace(" ", String.Empty), StringComparison.OrdinalIgnoreCase)))
                 {
                     return false;
                 }
