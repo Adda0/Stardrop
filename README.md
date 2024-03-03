@@ -29,13 +29,12 @@ I suggest installing Stardrop installed mods in the same directory, that is, `~/
 
 Remember that you in this version, you have to click `Save Changes` button at top right to save the changes made to the mod list. Keep in mind that adding mods or updating the existing ones will reset the changes made. Always save changes before adding/updating mods.
 
-Remember to never run Stardew Valley through StardropForked Flatpak (the pufferchick icon at top right). It works, but running a game through Flatpak might introduce some performance slowdowns which are definitely unwanted. Instead, run Stardew Valley from a new terminal with the following command (for now, better options to run the game are on the list of things to work out):
+Remember to never run Stardew Valley through StardropForked Flatpak (the pufferchick icon at top right). It works, but running a game through Flatpak might introduce some performance slowdowns which are definitely unwanted. Instead, run Stardew Valley from a new terminal with the following command (for now, better options to run the game are on the list of things to work out): (NOTE: If this command fails with an error saying that no usable version of `libssl` was found, just run Stardew through the Pufferchick button. The performance impact should be minimal, if any, anyway.)
 ``` sh
 ~/.local/share/Steam/steamapps/common/Stardew\ Valley/StardewModdingAPI --mods-path ~/.var/app/io.github.Adda0.Stardrop/config/Stardrop/Data/Selected\ Mods
 
 ```
 Modify the command to point to wherever your StardewModdingAPI is located.
-
 
 # Original Project Description
  
