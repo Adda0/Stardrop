@@ -528,17 +528,17 @@
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
-					<DataGridTextColumn Binding="{Binding UniqueId}" IsVisible="False">
+					<DataGridTextColumn Binding="{Binding UniqueId}" IsVisible="True">
 						<DataGridTextColumn.Header>
 							<TextBlock Text="{i18n:Translate ui.main_window.menu_headers.unique_id}" TextAlignment="Center" />
 						</DataGridTextColumn.Header>
 					</DataGridTextColumn>
-					<DataGridTextColumn Binding="{Binding Author}" CellStyleClasses="centered" IsVisible="False" Width="300">
+					<DataGridTextColumn Binding="{Binding Author}" CellStyleClasses="centered" IsVisible="True" Width="300">
 						<DataGridTextColumn.Header>
 							<TextBlock Text="{i18n:Translate ui.main_window.menu_headers.author}" TextAlignment="Center" />
 						</DataGridTextColumn.Header>
 					</DataGridTextColumn>
-					<DataGridTextColumn Binding="{Binding InstallTimestamp}" IsVisible="False">
+					<DataGridTextColumn Binding="{Binding InstallTimestamp}" IsVisible="True">
 						<DataGridTextColumn.Header>
 							<TextBlock Text="{i18n:Translate ui.main_window.menu_headers.install_timestamp}" TextAlignment="Center" />
 						</DataGridTextColumn.Header>
